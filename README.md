@@ -1,44 +1,11 @@
 | Université Paris-Saclay |
 | --- |
-|
+
 # Nom des bébés dans les Etats-Unis de 1880 à 2015
 
 Module : Visualisation de données
 
 Auteur : Abderrahim Benmelouka
-
-
-# Table des matières
-
-[1. Introduction](#_Toc121173419)
-
-[2. Données brutes](#_Toc121173420)
-
-[3. Transformation des données](#_Toc121173421)
-
-[3.1. Jeu de données « Total Births »](#_Toc121173425)
-
-[3.2. Jeu de données « Unique Names »](#_Toc121173426)
-
-[3.3. Jeu de données « Name Records »](#_Toc121173427)
-
-[3.4. Jeu de données « Unisex Names »](#_Toc121173428)
-
-[4. Tableau de bord](#_Toc121173429)
-
-[4.1. Total Births](#_Toc121173431)
-
-[4.2. Unique Names](#_Toc121173432)
-
-[4.3. Most Popular Names](#_Toc121173433)
-
-[4.4. Unisex Names](#_Toc121173434)
-
-[4.5. Name Analysis](#_Toc121173435)
-
-[4.6. Name Ranking](#_Toc121173436)
-
-[5. Conclusion](#_Toc121173437)
 
 # 1.Introduction
 
