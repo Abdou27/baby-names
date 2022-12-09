@@ -3,10 +3,12 @@ from dash import Dash, html, dcc, Input, Output, ctx
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import plotly.graph_objs as go
+ from plotly.validators.scatter.marker import SymbolValidator
 import pandas as pd
 import colorsys
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app.title = "Baby Names"
 
 name_records = pd.read_csv("data/name_records.csv")
 total_births = pd.read_csv("data/total_births.csv")
@@ -84,7 +86,7 @@ def update_unisex_names_fig(value):
     if not value:
         value = 50
     most_popular_unisex_names = unisex_names[:value]
-    most_popular_unisex_names["Rank"] = [i + 1 for i in range(most_popular_unisex_names.shape[0])]
+    most_popular_unisex_names.loc[:, "Rank"] = [i + 1 for i in range(most_popular_unisex_names.shape[0])]
     fig = px.treemap(
         data_frame=most_popular_unisex_names,
         names="Name",
@@ -174,25 +176,35 @@ def update_name_rankings_fig(value):
     names = name_rankings["Name"].unique()
     colors = list(get_distinct_colors(len(names)))
     colors = dict(zip(names, colors))
-    print(colors)
+    raw_symbols = SymbolValidator().values
+    symbols = [raw_symbols[i % len(raw_symbols)] for i in range(len(names))]
+    symbols = dict(zip(names, symbols))
+    symbols_names = [symbols[name] for name in name_rankings["Name"]]
     fig1 = px.scatter(name_rankings, x="Decade", y="Rank", color="Name",
-                      color_discrete_map=colors)
-    fig2 = px.line(name_rankings, x="Decade", y="Rank", color="Name", hover_name="Name",
-                   color_discrete_map=colors)
+                      color_discrete_map=colors, symbol=symbols_names)
+    fig2 = px.line(name_rankings, x="Decade", y="Rank", color="Name",
+                   color_discrete_map=colors, symbol=symbols_names)
     fig2.update_traces(line={"width": 10}, opacity=0.5)
     fig = go.Figure(data=fig1.data + fig2.data)
     fig['layout']['yaxis']['range'] = (value + 1, 0)
+    for trace in fig["data"]:
+        trace["name"] = trace["name"].split(",")[0]
+        trace["hovertemplate"] = 'Name=' + trace["name"] + '<br>Decade=%{x}<br>Rank=%{y}<extra></extra>'
+    fig.update_traces(
+        marker=dict(size=15),
+    )
     fig.update_layout(
         title="Top %d names per decade" % value,
         xaxis_title="Decade",
         yaxis_title="Rank",
+        legend_title="Names"
     )
     return fig
 
 
 app.layout = html.Div(children=[
     html.Div(children=[
-        html.H1(children='Data Visualisation : Baby Names in the USA from 1880 to 2015',
+        html.H1(children='Data Visualization : Baby Names in the USA from 1880 to 2015',
                 style={"margin-left": "10px", "color": "white", "margin-bottom": "0", "padding": "10px"}),
     ], style={"background": "black"}),
 
@@ -240,4 +252,4 @@ app.layout = html.Div(children=[
 ])
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    app.run_server(debug=True)
