@@ -3,7 +3,7 @@ from dash import Dash, html, dcc, Input, Output, ctx
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import plotly.graph_objs as go
- from plotly.validators.scatter.marker import SymbolValidator
+from plotly.validators.scatter.marker import SymbolValidator
 import pandas as pd
 import colorsys
 
